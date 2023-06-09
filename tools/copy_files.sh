@@ -166,10 +166,10 @@ if [ $CP_FINAL -eq 1 ]; then
     # final
     FULLDST=$DST/config/final
     [ ! -d $FULLDST ] && mkdir -p          $FULLDST
-    cpfile $BDIR/final.g16.0001.zkey           $FULLDST
-    cpfile $BDIR/final_cpp/final.dat           $FULLDST/final.verifier.dat
-    cpfile $BDIR/final.g16.verkey.json         $FULLDST
-    cpfile -r $BDIR/final_cpp                  $DST/c_files
+    cpfile $BDIR/final.g16.0001.zkey       $FULLDST
+    cpfile $BDIR/final_cpp/final.dat       $FULLDST/final.verifier.dat
+    cpfile $BDIR/final.g16.verkey.json     $FULLDST
+    cpdir $BDIR/final_cpp                  $DST/c_files
 fi
 
 if [ $CP_CIRCOM -eq 1 ]; then
