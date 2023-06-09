@@ -15,7 +15,7 @@
       "recursive_pil_check recursive_verifier_check ",
       "recursivef_gencircom recursivef_compile recursivef_setup recursivef_buildstarkinfo recursivef_buildchelpers recursivef_buildconstanttree  recursivef_verifier_gencircom",
       "final_gencircom final_compile",
-      "fflonk_setup fflonk_evk fflonk_solidity"
+      "g16setup g16contribute g16evk g16wc g16prove g16verify g16solidity"
     ],
     "steps_setup": [
       "buildrom buildpil buildstoragerom buildconstants buildstarkinfo buildchelpers buildconstanttree gencircom compilecircom",
@@ -25,11 +25,12 @@
       "recursive_pil_check recursive_verifier_check ",
       "recursivef_gencircom recursivef_compile recursivef_setup recursivef_buildstarkinfo recursivef_buildchelpers recursivef_buildconstanttree  recursivef_verifier_gencircom",
       "final_gencircom final_compile",
-      "fflonk_setup fflonk_evk fflonk_solidity"
+      "g16setup g16contribute g16evk g16solidity"
     ],
     "steps_proof": [
       "exec pilverify prove verify",
-      "c12a_exec c12a_pilverify c12a_prove c12a_verify"
+      "c12a_exec c12a_pilverify c12a_prove c12a_verify",
+      "g16wc g16prove g16verify"
     ]
   },
   "scripts": {
@@ -85,8 +86,13 @@
     "recursivef_buildconstanttree": ". ./pre.sh && $BCTREE -c $BDIR/recursivef.const -p $BDIR/recursivef.pil -s $BDIR/recursivef.starkstruct.json -t $BDIR/recursivef.consttree -v $BDIR/recursivef.verkey.json",
     "recursivef_verifier_gencircom": ". ./pre.sh && $PILSTARK/main_pil2circom.js --skipMain -p $BDIR/recursivef.pil -s $BDIR/recursivef.starkinfo.json -v $BDIR/recursivef.verkey.json -o $BDIR/recursivef.verifier.circom",
     "final_gencircom": ". ./pre.sh && cp recursive/final.circom $BDIR",
-    "final_compile": ". ./pre.sh && circom --O1 --r1cs --sym --wasm --c --verbose $BDIR/final.circom -o $BDIR -l node_modules/pil-stark/circuits.bn128 -l node_modules/circomlib/circuits",
+    "final_compile": ". ./pre.sh && circom --r1cs --sym --wasm --c --verbose $BDIR/final.circom -o $BDIR -l node_modules/pil-stark/circuits.bn128 -l node_modules/circomlib/circuits",
     "downloadptaw": "wget -P build https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final.ptau",
+    "g16setup": ". ./pre.sh && $SNARKJS g16s $BDIR/final.r1cs build/powersOfTau28_hez_final.ptau $BDIR/final.g16.0000.zkey --verbose",
+    "g16contribute": ". ./pre.sh && $SNARKJS zkc  $BDIR/final.g16.0000.zkey $BDIR/final.g16.0001.zkey --verbose -e=\"$(dd if=/dev/random bs=64 count=1 | base64 -w0)\"",
+    "g16evk": ". ./pre.sh && $SNARKJS zkev  $BDIR/final.g16.0001.zkey $BDIR/final.g16.verkey.json",
+    "g16solidity": ". ./pre.sh && $SNARKJS zkesv $BDIR/final.g16.0001.zkey $BDIR/final.g16.verifier.sol",
+    "preg16setup": ". ./pre.sh && [ -f build/powersOfTau28_hez_final.ptau ] || npm run downloadptaw",
     "fflonk_setup": ". ./pre.sh && $SNARKJS ffs $BDIR/final.r1cs build/powersOfTau28_hez_final.ptau $BDIR/final.fflonk.zkey --verbose",
     "fflonk_evk": ". ./pre.sh && $SNARKJS zkev $BDIR/final.fflonk.zkey $BDIR/final.fflonk.verkey.json",
     "fflonk_solidity": ". ./pre.sh && $SNARKJS zkesv $BDIR/final.fflonk.zkey $BDIR/final.fflonk.verifier.sol",
@@ -130,7 +136,7 @@
     "json-bigint": "^1.0.0",
     "pil-stark": "0.0.56",
     "pilcom": "0.0.23",
-    "snarkjs": "0.6.9",
+    "snarkjs": "0.7.0",
     "yargs": "^17.4.0"
   },
   "devDependencies": {

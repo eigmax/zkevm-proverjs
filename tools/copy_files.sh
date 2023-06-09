@@ -166,10 +166,10 @@ if [ $CP_FINAL -eq 1 ]; then
     # final
     FULLDST=$DST/config/final
     [ ! -d $FULLDST ] && mkdir -p          $FULLDST
-    cpfile $BDIR/final.fflonk.zkey         $FULLDST
-    cpfile $BDIR/final_cpp/final.dat       $FULLDST/final.verifier.dat
-    cpfile $BDIR/final.fflonk.verkey.json  $FULLDST
-    cpdir $BDIR/final_cpp                  $DST/c_files
+    $CP $BDIR/final.g16.0001.zkey           $FULLDST
+    $CP $BDIR/final_cpp/final.dat           $FULLDST/final.verifier.dat
+    $CP $BDIR/final.g16.verkey.json         $FULLDST
+    $CP -r $BDIR/final_cpp                  $DST/c_files
 fi
 
 if [ $CP_CIRCOM -eq 1 ]; then
@@ -211,7 +211,7 @@ if [ $CP_BUILDS -eq 1 ]; then
         BUILDS=`basename $HASHFILE`" "
     fi
 
-    BUILDS="${BUILDS}steps.log c12a.starkstruct.json final.fflonk.verifier.sol final.r1cs final.sym recursive.starkstruct.json recursive1.r1cs recursive1.sym recursive2.r1cs recursive2.sym recursivef.r1cs recursivef.starkstruct.json recursivef.sym zkevm.starkstruct.json zkevm.verifier.r1cs zkevm.verifier.sym"
+    BUILDS="${BUILDS}steps.log c12a.starkstruct.json final.g16.verifier.sol final.r1cs final.sym recursive.starkstruct.json recursive1.r1cs recursive1.sym recursive2.r1cs recursive2.sym recursivef.r1cs recursivef.starkstruct.json recursivef.sym zkevm.starkstruct.json zkevm.verifier.r1cs zkevm.verifier.sym"
     for F in $BUILDS; do
         cpfile $BDIR/$F $FULLDST
     done
